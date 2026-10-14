@@ -32,7 +32,16 @@ export default function LoginPage() {
       //   body: JSON.stringify({ redId, password }),
       // });
       // if (!res.ok) throw new Error('Invalid credentials');
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const res = await fetch('/authorizedusers/post',{
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({redId,password}),
+      });
+      if(!res.ok){
+        throw new Error("Could not create authorized user.");
+      }
+      const user = await res.json();
+      //await new Promise((resolve) => setTimeout(resolve, 900));
       setShowBanner(true); // placeholder: always shows the error state for now
     } finally {
       setLoading(false);
