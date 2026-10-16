@@ -2,7 +2,7 @@
   "name": "backend",
   "private": true,
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node api.js && node src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
