@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({ redId: false, password: false });
   const [loading, setLoading] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
+  const [showForgotTip, setShowForgotTip] = useState(false);
 
   function validate() {
     const next = {
@@ -26,25 +27,30 @@ export default function LoginPage() {
     setLoading(true);
     try {
       //TODO: note that /api/authorizedusers/create takes the same parameters but will make an account (will need to include accountType going forward)
-      const res = await fetch('/api/authorizedusers/login',{ 
+      const res = await fetch("/api/authorizedusers/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({redId,password}),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ redId, password }),
       });
-      if(!res.ok){
+      if (!res.ok) {
         setShowBanner(true); // invalid login - shows the error state
-        throw new Error("Error retrieving authorized user with ID " + redId + ".");
+        throw new Error(
+          "Error retrieving authorized user with ID " + redId + ".",
+        );
       }
       const user = await res.json();
-      if(!user.AccountNumber){ // primary key, but if this isn't found then don't continue
-        throw new Error("Found a matching record, but not enough data for user associated with ID " + redId + ".");
-      }
-      else{
+      if (!user.AccountNumber) {
+        // primary key, but if this isn't found then don't continue
+        throw new Error(
+          "Found a matching record, but not enough data for user associated with ID " +
+            redId +
+            ".",
+        );
+      } else {
         //TODO: navigate to another screen here
         console.log("success!");
       }
       //await new Promise((resolve) => setTimeout(resolve, 900));
-      
     } finally {
       setLoading(false);
     }
@@ -153,13 +159,35 @@ export default function LoginPage() {
             </div>
 
             <div className="row-between">
-              <label className="remember">
+              {/* <label className="remember">
                 <input type="checkbox" />
                 Remember me
-              </label>
-              <a href="#" className="forgot">
-                Forgot password?
-              </a>
+              </label> */}
+              <div className="forgot-wrap">
+                <button
+                  type="button"
+                  className="forgot"
+                  onClick={() => setShowForgotTip((s) => !s)}
+                >
+                  Forgot password?
+                </button>
+                {showForgotTip && (
+                  <div className="forgot-tip" role="tooltip">
+                    <p>
+                      Passwords are reset by a system administrator. Email the
+                      registrar's office from your campus account to request a
+                      reset.
+                    </p>
+                    <button
+                      type="button"
+                      className="forgot-tip-close"
+                      onClick={() => setShowForgotTip(false)}
+                    >
+                      Got it
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <button
@@ -174,7 +202,10 @@ export default function LoginPage() {
 
           <div className="divider">or</div>
           <p className="help-link">
-            Need an account? <a href="#">Contact the registrar's office</a>
+            Need an account?{" "}
+            <a href="mailto:registrar@email.edu?">
+              Contact the registrar's office
+            </a>
           </p>
         </div>
       </section>

@@ -211,7 +211,7 @@ input.invalid {
 .row-between {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin: -4px 0 22px;
   font-size: 13px;
 }
@@ -328,6 +328,54 @@ input.invalid {
   font-size: 12.5px;
   line-height: 1.5;
   margin-bottom: 20px;
+}
+
+/* forgot password tip */
+.forgot-wrap {
+  position: relative;
+}
+
+.forgot {
+  background: none;
+  border: none;
+  font: inherit;
+  padding: 0;
+}
+
+.forgot-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.forgot-tip p {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.forgot-tip-close {
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  background: var(--maroon-700);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.forgot-tip-close:hover {
+  background: var(--maroon-800);
 }
 
 @media (max-width: 760px) {
