@@ -7,11 +7,10 @@
 Thumbs.db
 
 # enviorments
-.env
-.env.local
 *.pem
 
 # Dependencies
 node_modules/
 /venv/
 
+config.bat
