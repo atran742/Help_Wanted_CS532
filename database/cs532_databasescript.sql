@@ -52,13 +52,13 @@ COMMENT ON TABLE er."TransferCourse" IS
 ;
 
 
-CREATE TABLE signmeup."AuthorizedUser"(
-	"EmployeeNumber" integer NOT NULL,
-	"Name" varchar NOT NULL,
+CREATE TABLE signmeup."AuthorizedUser" (
+	"AccountNumber" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "signmeup"."AuthorizedUser_AccountNumber_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"Email" varchar NOT NULL,
 	"Password" varchar NOT NULL,
-	"JobTitle" varchar NOT NULL,
-	CONSTRAINT "AuthorizedUser_pkey" PRIMARY KEY("EmployeeNumber")
+	"AccountType" varchar NOT NULL
 );
+CREATE UNIQUE INDEX "AuthorizedUser_pkey" ON "signmeup"."AuthorizedUser" ("AccountNumber");
 
 
 ALTER TABLE signmeup."AuthorizedUser" ENABLE ROW LEVEL SECURITY;

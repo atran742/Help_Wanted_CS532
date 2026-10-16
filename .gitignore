@@ -6,7 +6,7 @@
 .DS_Store
 Thumbs.db
 
-# Private environments and secrets
+# enviorments
 .env
 .env.local
 *.pem
