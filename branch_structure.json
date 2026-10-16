@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "feature/user_login-with-dbconnection",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "feature/user_login-with-dbconnection": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "feature/user_login-with-dbconnection",
+    "origin"
+  ]
+}

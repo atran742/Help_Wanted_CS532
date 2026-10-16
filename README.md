@@ -27,6 +27,23 @@ SignMeUp/
 │    └── cs532_databasediagram.png
 │    └── cs532_databasescript.sql
 │
+├── backend/
+│   ├── src/
+│   │   └── server.js
+│   │   └── config
+│   │       └── db.js
+│   ├── api.js
+├── frontend/
+│   ├── signmeup/
+│   │   └── index.html
+│   │   └── src
+│   │       └── pages
+│   │           └── LoginPage.css
+│   │           └── LoginPage.jsx
+│   │       └── App.jsx
+│   │       └── index.css
+│   │       └── main.jsx
+│   ├── api.js
 ├── docs/
 │   ├── Systems_architecture/
 │   │   └── Sw_arch_532.png
