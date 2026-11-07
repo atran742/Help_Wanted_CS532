@@ -317,27 +317,6 @@ function AppShell({
     }, `Added a protected note to student ${studentId}`);
   }
 
-<<<<<<< Updated upstream
-  function updateOutline(studentId, entry, status) {
-    mutate((next) => {
-      const outline = next.outlines[studentId];
-      const existing = outline.entries.find(
-        (item) => item.courseId === entry.courseId,
-      );
-      const before = existing.status;
-      existing.status = status;
-      existing.statusDate = new Date().toISOString().slice(0, 10);
-      existing.approvedBy = currentUser.id;
-      outline.lastApproved = existing.statusDate;
-      outline.history.unshift({
-        courseId: entry.courseId,
-        from: before,
-        to: status,
-        changedBy: currentUser.id,
-        changedAt: new Date().toISOString(),
-      });
-    }, `Updated major outline status for ${studentId}`);
-=======
   function updateOutline(studentId, action, payload = {}) {
     const isAuthorized =
       effectiveRole === "admin" || effectiveRole === "advisor";
@@ -419,7 +398,6 @@ function AppShell({
         });
       }
     }, `Updated major outline for ${studentId}`);
->>>>>>> Stashed changes
   }
 
   function saveGrade(courseId, row) {
@@ -1387,18 +1365,6 @@ function CourseTable({ title, courses = [], transfer = false }) {
   );
 }
 
-<<<<<<< Updated upstream
-function MajorsPage({ state, role, activeStudentId, onUpdateOutline }) {
-  const selectable =
-    role === "student"
-      ? state.students.filter((student) => student.id === activeStudentId)
-      : state.students;
-  const [studentId, setStudentId] = useState(activeStudentId);
-  const student = studentById(state, studentId);
-  const outline = state.outlines[studentId];
-  const major = state.majors.find((item) => item.id === outline?.majorId);
-  const canEdit = role === "admin" || role === "advisor";
-=======
 function MajorsPage({
   state,
   role,
@@ -1468,89 +1434,10 @@ function MajorsPage({
     return courseById(state, courseId)?.title ?? "Course not in catalog";
   }
 
->>>>>>> Stashed changes
   return (
     <div className="page-stack">
       <div className="intro-row">
         <div>
-<<<<<<< Updated upstream
-          <p className="eyebrow">MAJOR subsystem</p>
-          <h2>Major requirements and outline</h2>
-          <p className="muted">
-            Review required and elective courses, then track approved outline
-            status and history.
-          </p>
-        </div>
-        {role !== "student" && (
-          <label className="inline-select">
-            Student{" "}
-            <select
-              value={studentId}
-              onChange={(event) => setStudentId(event.target.value)}
-            >
-              {selectable.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name} ({item.id})
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-      </div>
-      {!student || !outline || !major ? (
-        <Panel title="Major outline">
-          <EmptyState title="No approved outline">
-            A student and major outline are required before this screen can
-            continue.
-          </EmptyState>
-        </Panel>
-      ) : (
-        <div className="two-column-layout">
-          <div className="wide-column">
-            <Panel
-              title={`${major.title} (${major.id})`}
-              eyebrow={`${student.name} · ${major.department}`}
-              actions={
-                <Button variant="secondary" onClick={() => window.print()}>
-                  Print plan
-                </Button>
-              }
-            >
-              <div className="record-summary">
-                <Info label="Required units" value={major.requiredUnits} />
-                <Info label="Advisor" value={outline.approvedBy} />
-                <Info label="Last approved" value={outline.lastApproved} />
-                <Info
-                  label="Required courses"
-                  value={major.requiredCourses.length}
-                />
-              </div>
-              <div className="outline-list">
-                <h3>Approved course entries</h3>
-                {outline.entries.map((entry) => {
-                  const course = courseById(state, entry.courseId) ?? {
-                    title: "Course not in catalog",
-                  };
-                  return (
-                    <div className="outline-row" key={entry.courseId}>
-                      <div>
-                        <strong>{entry.courseId}</strong>
-                        <span>{course.title}</span>
-                        <small>
-                          Last action {entry.statusDate} · approved by{" "}
-                          {entry.approvedBy}
-                        </small>
-                      </div>
-                      {canEdit ? (
-                        <select
-                          value={entry.status}
-                          onChange={(event) =>
-                            onUpdateOutline(
-                              student.id,
-                              entry,
-                              event.target.value,
-                            )
-=======
           <p className="eyebrow">MAJOR</p>
           <h2>Major Course Requirements</h2>
           <p className="muted">
@@ -1777,7 +1664,6 @@ function MajorsPage({
                               courseId: entry.courseId,
                               status: event.target.value,
                             })
->>>>>>> Stashed changes
                           }
                         >
                           <option value="approved">Approved</option>
@@ -1794,61 +1680,6 @@ function MajorsPage({
                         </Status>
                       )}
                     </div>
-<<<<<<< Updated upstream
-                  );
-                })}
-              </div>
-              <div className="course-table-block">
-                <h3>Elective courses</h3>
-                <p className="muted">
-                  {major.electiveCourses.join(", ") || "No electives recorded."}
-                </p>
-              </div>
-            </Panel>
-          </div>
-          <div className="side-column">
-            <Panel title="Outline history" eyebrow="Protected audit history">
-              {outline.history.length ? (
-                <div className="history-list">
-                  {outline.history.map((item, index) => (
-                    <div
-                      className="history-item"
-                      key={`${item.courseId}-${index}`}
-                    >
-                      <strong>{item.courseId}</strong>
-                      <span>
-                        {item.from} → {item.to}
-                      </span>
-                      <small>
-                        {dateTime(item.changedAt)} · {item.changedBy}
-                      </small>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <EmptyState title="No changes yet">
-                  Approved outline changes will remain available here.
-                </EmptyState>
-              )}
-              <p className="panel-footnote">
-                Approved entries cannot be deleted. Status changes are retained
-                in the history.
-              </p>
-            </Panel>
-            <Panel title="Access rules" eyebrow="MJ05">
-              <ul className="rule-list">
-                <li>Required-course list: available to all users.</li>
-                <li>
-                  Student status and history: student, advisor, or
-                  administrator.
-                </li>
-                <li>
-                  Only an advisor or administrator may change the outline.
-                </li>
-              </ul>
-            </Panel>
-          </div>
-=======
                   ))}
                 </div>
 
@@ -2101,7 +1932,6 @@ function MajorsPage({
               Print Report
             </Button>
           </Panel>
->>>>>>> Stashed changes
         </div>
       )}
     </div>
