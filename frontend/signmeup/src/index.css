@@ -1698,3 +1698,59 @@ td small {
     print-color-adjust: exact;
   }
 }
+
+@media print {
+  /* Hide the entire application by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the generated report */
+  .reg-report-preview,
+  .reg-report-preview * {
+    visibility: visible;
+  }
+
+  .reg-report-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    color: black;
+    background: white;
+  }
+
+  .reg-report-preview table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .reg-report-preview th,
+  .reg-report-preview td {
+    border: 1px solid #999;
+    padding: 8px;
+    text-align: left;
+    color: black;
+  }
+
+  .reg-report-preview th {
+    background: #eee !important;
+  }
+
+  .reg-report-preview .report-heading {
+    margin-bottom: 24px;
+  }
+
+  .reg-report-preview h2 {
+    font-size: 22px;
+  }
+
+  .reg-report-preview tr {
+    break-inside: avoid;
+  }
+
+  @page {
+    margin: 0.6in;
+  }
+}
