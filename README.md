@@ -86,6 +86,15 @@ $env:DATABASE_URL = "your_postgresql_connection_string"
 npm start
 ```
 
-The API exposes `/health`, `/health/database`, `/api/authorizedusers/login`, `/api/authorizedusers`, and `/students`. The database script in `database/cs532_databasescript.sql` creates the subsystem schemas and tables for a new PostgreSQL database.
+The API exposes `/health`, `/health/database`, `/api/authorizedusers/login`, and `/api/authorizedusers`. GET data endpoints (all return PostgreSQL rows as JSON arrays) are:
+
+- Students: `/api/students` (`/students` remains as an alias), `/api/student-notes`, `/api/transcripts`, `/api/transfer-courses`
+- Registration: `/api/departments`, `/api/courses`, `/api/prerequisites`, `/api/classes`, `/api/enrollments`
+- Majors: `/api/majors`, `/api/major-courses`, `/api/major-advisors`, `/api/approved-outlines`, `/api/outline-entries`, `/api/outline-history`
+- Faculty: `/api/faculty`, `/api/faculty-teaching-departments`, `/api/qualified-faculty`
+- Grades: `/api/grades`, `/api/course-comments`
+- System: `/api/audit`, `/api/subsystems`, `/api/subsystem-access`
+
+The database script in `database/cs532_databasescript.sql` creates the subsystem schemas and tables for a new PostgreSQL database.
 
 See `docs/requirements/Implementation status.md` for the requirement-to-feature mapping and the remaining deployment boundaries.

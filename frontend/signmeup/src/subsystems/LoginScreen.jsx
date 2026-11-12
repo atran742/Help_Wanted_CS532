@@ -21,6 +21,12 @@ export function LoginScreen({ onLogin }) {
         setError(
           "The credentials were not recognized. Check both values and try again.",
         );
+    } catch (loginError) {
+      setError(
+        loginError instanceof Error
+          ? loginError.message
+          : "Unable to sign in. Please try again.",
+      );
     } finally {
       setLoading(false);
     }

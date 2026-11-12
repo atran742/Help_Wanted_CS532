@@ -275,6 +275,7 @@ function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
   async function login(username, password) {
+    //TODO: Remove up until 296
     const demoUser = getDemoUser(state, username, password);
     if (demoUser) {
       setSession(demoUser);
@@ -293,28 +294,73 @@ function App() {
       }));
       return demoUser;
     }
+
+    let response;
     try {
-      const response = await fetch("/api/authorizedusers/login", {
+      response = await fetch("/api/authorizedusers/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ redId: username, password }),
       });
-      if (!response.ok) return null;
-      const apiUser = await response.json();
-      const user = {
-        id: String(apiUser.EmployeeNumber ?? apiUser.AccountNumber),
-        username: apiUser.Email,
-        name: apiUser.UserName,
-        role: apiUser.AccountType || "student",
-        title: apiUser.JobTitle || "Authorized user",
-        access: [],
-      };
-      setSession(user);
-      setPage("dashboard");
-      return user;
     } catch {
-      return null;
+      throw new Error("Unable to reach the sign-in service. Check that the backend is running.");
     }
+
+    let responseBody;
+    try {
+      const responseText = await response.text();
+      responseBody = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      if (response.status === 502 || response.status === 503) {
+        throw new Error(
+          "The sign-in service is unavailable. Start or restart the backend, then try again.",
+        );
+      }
+      throw new Error(
+        `The sign-in service returned an invalid response (${response.status}).`,
+      );
+    }
+
+    if (!response.ok) {
+      if (response.status === 401) return null;
+      throw new Error(
+        responseBody.error ||
+          `The sign-in service returned an error (${response.status}).`,
+      );
+    }
+
+    const apiUser = responseBody;
+    const accountType = String(apiUser.AccountType ?? "")
+      .trim()
+      .toLowerCase();
+    const roleByAccountType = {
+      student: "student",
+      faculty: "faculty",
+      professor: "faculty",
+      advisor: "advisor",
+      "major advisor": "advisor",
+      admin: "admin",
+      administrator: "admin",
+      "system administrator": "admin",
+    };
+    const role = roleByAccountType[accountType];
+    if (!role) {
+      throw new Error(
+        "Your account is recognized, but its role is not supported. Ask an administrator to update the account type.",
+      );
+    }
+
+    const user = {
+      id: String(apiUser.AccountNumber),
+      username: apiUser.Email,
+      name: apiUser.UserName,
+      role: apiUser.AccountType || "student",
+      title: apiUser.JobTitle || "Authorized user",
+      access: [],
+    };
+    setSession(user);
+    setPage("dashboard");
+    return user;
   }
   function reset() {
     if (
