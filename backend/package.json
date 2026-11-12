@@ -2,7 +2,8 @@
   "name": "backend",
   "private": true,
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node init && node src/server.js",
+    "migrate:password-hashes": "node src/migrate-password-hashes.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
